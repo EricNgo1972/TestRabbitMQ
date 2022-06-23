@@ -1,14 +1,12 @@
 ﻿using ConsoleTools;
+using EasyNetQ;
+using pbs.Helper;
+using SPC.RabbitMQ;
+using SPC.Services.COM;
+using SPC.Services.COM.RabbitMQ;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using SPC.RabbitMQ;
-using EasyNetQ;
-using SPC.Services.COM;
-using pbs.Helper;
-using SPC.Services.COM.RabbitMQ;
 
 namespace SPC.BO.RabbitMQ
 {
@@ -156,8 +154,7 @@ namespace SPC.BO.RabbitMQ
 
                 Console.WriteLine($"{ex.Message}{Environment.NewLine}{ex.InnerException.Message}");
             }
-            //Console.WriteLine("Press any key to continue");
-            //Console.ReadKey();
+           
 
         }
     }

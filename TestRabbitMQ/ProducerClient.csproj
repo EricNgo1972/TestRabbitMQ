@@ -45,9 +45,6 @@
     <Reference Include="SPC.Phoebus.PBO">
       <HintPath>..\..\..\..\..\..\Business Solutions\MS Visual Studio 2005\PhoebusWIN\lib\SPC.Phoebus.PBO.dll</HintPath>
     </Reference>
-    <Reference Include="SPC.Phoebus.QDBO">
-      <HintPath>..\..\..\..\..\..\Business Solutions\MS Visual Studio 2005\PhoebusWIN\lib\SPC.Phoebus.QDBO.dll</HintPath>
-    </Reference>
     <Reference Include="SPC.RabbitMQ, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Business Solutions\MS Visual Studio 2005\PhoebusWIN\lib\SPC.RabbitMQ.dll</HintPath>

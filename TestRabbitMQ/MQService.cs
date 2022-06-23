@@ -1,11 +1,12 @@
 ﻿using EasyNetQ;
-using EasyNetQ.Logging;
-using EasyNetQ.Topology;
 using RabbitMQ.Client;
 using System.Threading.Tasks;
 
 namespace SPC.RabbitMQ
 {
+    /// <summary>
+    /// see how to setup cloud account : https://phoebusfiles.blob.core.windows.net/help/spc.rabbitmq.rabbitmqsetting.html
+    /// </summary>
     public class MQService
     {
         #region Setup
@@ -17,19 +18,6 @@ namespace SPC.RabbitMQ
         private string _userName = "kjtowiia";
         private string _password = "P43mO_LfWEeQUeEuFDIgjPBTh0vOWUQf";
         private int _port = 5672;
-
-        private IConnection _connection;
-        internal IConnection GetConnection()
-        {
-            if (_connection == null || !_connection.IsOpen)
-            {
-                var factory = new ConnectionFactory() { HostName = _hostName, VirtualHost = _virtualHost, UserName = _userName, Password = _password, Port = _port, Ssl = new SslOption() { Enabled = false } };
-
-                _connection = factory.CreateConnection();
-
-            }
-            return _connection;
-        }
 
 
         private static MQService _instance;
@@ -71,30 +59,7 @@ namespace SPC.RabbitMQ
             await theBus.PubSub.PublishAsync<SPC.Services.COM.IPubSubMessage>(message);
         }
 
-        public static void DeleteQueue(string queueName)
-        {
-            var advance = Instance.GetServiceBus().Advanced;
-
-                try
-                {                
-                    advance.QueueDeclarePassive(queueName);
-
-                    var theQueue = advance.QueueDeclare(queueName);
-
-                    advance.QueueDelete(theQueue);
-
-                }
-                catch (System.Exception)
-                {
-
-                    
-                }
-                
-         
-            
-        }
-                       
-
+    
         #endregion
     }
 }
