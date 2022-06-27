@@ -17,24 +17,25 @@ namespace SPC.BO.RabbitMQ
             subscribers = new List<EasyNetQ.ISubscriptionResult>();
 
             var menu = new ConsoleMenu(args, level: 0)
+                          .Add("Chat", async () => await RunAction("Chat"))
                           .Add("Message", async () => await RunAction("Message"))
                           .Add("Invalidate", async () => await RunAction("Invalidate"))
                           .Add("AddSubscriber", async () => await RunAction("AddSubscriber"))
                           .Add("Exit", () =>
                               {
-                                 
+
                                   var theBus = MQService.Instance.GetServiceBus();
-                                 
+
                                   theBus.Dispose();
 
                                   Console.Clear();
-                                  
+
                                   Console.WriteLine("Goodbye!!!");
-                                  
+
                                   Console.ReadKey();
-                                  
+
                                   Environment.Exit(0);
-                                  
+
                               }
                           )
                           .Configure(config =>
@@ -62,6 +63,34 @@ namespace SPC.BO.RabbitMQ
 
                 switch (cmd)
                 {
+                    case "Chat":
+
+                        Console.Write("Enter user ids/machine: ");
+
+                        var users = Console.ReadLine();
+
+                        if (string.IsNullOrEmpty(users)) return;
+
+                        Console.Write("Enter message: ");
+
+                        msg = Console.ReadLine();
+
+                        if (!string.IsNullOrEmpty(msg))
+                        {
+                            Message themsg = Message.NewChatMessage(users);
+
+                            themsg.CommandUrl = msg;
+
+                            themsg.MessageBody = msg;
+
+                            themsg.DataOperation = "chat";
+
+                            await MQService.PublishAsync(themsg);
+
+
+                        }
+                        break;
+
                     case "Message":
                         Console.Write("Enter message: ");
 
@@ -69,7 +98,7 @@ namespace SPC.BO.RabbitMQ
 
                         if (!string.IsNullOrEmpty(msg))
                         {
-                           Message themsg = Message.TestMessage();
+                            Message themsg = Message.TestMessage();
 
                             themsg.CommandUrl = msg;
 
@@ -78,11 +107,11 @@ namespace SPC.BO.RabbitMQ
                             themsg.DataOperation = "message";
 
                             await MQService.PublishAsync(themsg);
-                                                        
+
 
                         }
                         break;
-                        
+
                     case "Invalidate":
                         Console.Write("Enter class id: ");
 
@@ -94,21 +123,21 @@ namespace SPC.BO.RabbitMQ
 
                             themsg.MessageData.InsertUpdate("Entity", "VSA");
 
-                           themsg.MessageBody = msg;
+                            themsg.MessageBody = msg;
 
                             await MQService.PublishAsync(themsg);
 
 
-                           //pbs.BO.PS.InvalidateMessage themsg1 = pbs.BO.PS.InvalidateMessage.NewMessage(msg,"Warning");
+                            //pbs.BO.PS.InvalidateMessage themsg1 = pbs.BO.PS.InvalidateMessage.NewMessage(msg,"Warning");
 
-                           // await MQService.PublishAsync(themsg1);
+                            // await MQService.PublishAsync(themsg1);
 
                         }
                         break;
-                       
+
 
                     case "AddSubscriber":
-                        
+
                         Console.Write("Enter queue name: ");
 
                         string queueName = Console.ReadLine();
@@ -117,7 +146,7 @@ namespace SPC.BO.RabbitMQ
                         {
                             IBus theBus = MQService.Instance.GetServiceBus();
 
-                           EasyNetQ.IPubSub pubsub = theBus.PubSub;
+                            EasyNetQ.IPubSub pubsub = theBus.PubSub;
 
                             var newSub = pubsub.Subscribe<SPC.Services.COM.IPubSubMessage>(queueName, (IPubSubMessage message) =>
                              {
@@ -140,7 +169,7 @@ namespace SPC.BO.RabbitMQ
                             Console.Write($"Created new subscriber: {queueName}");
                         }
 
-                        
+
 
                         break;
                     default:
@@ -154,7 +183,7 @@ namespace SPC.BO.RabbitMQ
 
                 Console.WriteLine($"{ex.Message}{Environment.NewLine}{ex.InnerException.Message}");
             }
-           
+
 
         }
     }
