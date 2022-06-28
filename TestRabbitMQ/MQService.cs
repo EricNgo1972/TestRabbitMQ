@@ -56,7 +56,9 @@ namespace SPC.RabbitMQ
         {
             var theBus = Instance.GetServiceBus();
 
-            await theBus.PubSub.PublishAsync<SPC.Services.COM.IPubSubMessage>(message);
+            //ENEJVR
+            await theBus.PubSub.PublishAsync<SPC.Services.COM.IPubSubMessage>(message, "167SD09.34223");
+           // await theBus.PubSub.PublishAsync<SPC.Services.COM.IPubSubMessage>(message );
         }
 
     
